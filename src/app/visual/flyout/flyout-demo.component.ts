@@ -16,10 +16,6 @@ import {
 } from '@skyux/toast';
 
 import {
-  SkyFlyoutService
-} from '../../public/modules/flyout/flyout.service';
-
-import {
   SkyFlyoutModalDemoComponent
 } from './flyout-modal.component';
 
@@ -27,12 +23,19 @@ import {
   FlyoutDemoContext
 } from './flyout-demo-context';
 
+import {
+  SkyMediaQueryService,
+  SkyMediaBreakpoints
+} from '@skyux/core';
+
 let nextId = 0;
 
 @Component({
   selector: 'sky-test-cmp-flyout',
   templateUrl: './flyout-demo.component.html',
-  providers: [SkyFlyoutService]
+  providers: [
+    SkyMediaQueryService
+  ]
 })
 export class FlyoutDemoComponent implements OnInit {
 
@@ -42,10 +45,17 @@ export class FlyoutDemoComponent implements OnInit {
 
   constructor(
     public context: FlyoutDemoContext,
+    private mediaQueryService: SkyMediaQueryService,
     private modalService: SkyModalService,
     private toastService: SkyToastService,
     private router: Router
-  ) { }
+  ) {
+    this.mediaQueryService.subscribe((value) => {
+      if (value > SkyMediaBreakpoints.md) {
+        console.warn('Should this be xs or sm?');
+      }
+    });
+  }
 
   public ngOnInit(): void {
     this.addData();
