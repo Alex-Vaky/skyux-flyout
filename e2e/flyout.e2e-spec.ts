@@ -96,6 +96,16 @@ describe('Flyout', () => {
     element(by.css('.sky-flyout .sky-flyout-btn-close')).click();
   });
 
+  it('should match previous screenshot when flyout is fullscreen (screen: xs)', (done) => {
+    SkyHostBrowser.get('visual/flyout');
+    SkyHostBrowser.setWindowBreakpoint('xs');
+    element(by.css('#open-flyout-fullscreen')).click();
+    expect('body').toMatchBaselineScreenshot(done, {
+      screenshotName: 'flyout-fullscreen'
+    });
+    element(by.css('.sky-flyout .sky-flyout-btn-close')).click();
+  });
+
   it('should match previous screenshot when the flyout contains responsive content (flyout: xs)',
     (done) => {
       SkyHostBrowser.get('visual/flyout');
@@ -132,7 +142,7 @@ describe('Flyout', () => {
   it('should match previous screenshot when the flyout contains responsive content (flyout: lg)',
     (done) => {
       SkyHostBrowser.get('visual/flyout');
-      SkyHostBrowser.setWindowBreakpoint('lg');
+      SkyHostBrowser.setWindowDimensions(1250, 800);
       element(by.css('#open-responsive-flyout-lg')).click();
       expect('body').toMatchBaselineScreenshot(done, {
         screenshotName: 'flyout-responsive-lg'

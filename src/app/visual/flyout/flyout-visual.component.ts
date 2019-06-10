@@ -57,7 +57,8 @@ export class FlyoutVisualComponent implements OnDestroy {
       providers: [{
         provide: FlyoutDemoContext,
         useValue: record
-      }]
+      }],
+      defaultWidth: 500
     });
 
     this.flyout.closed.subscribe(() => {
@@ -73,6 +74,7 @@ export class FlyoutVisualComponent implements OnDestroy {
         provide: FlyoutDemoContext,
         useValue: record
       }],
+      defaultWidth: 500,
       showIterator: true,
       iteratorPreviousButtonDisabled: previousButtonDisabled,
       iteratorNextButtonDisabled: nextButtonDisabled
@@ -89,6 +91,23 @@ export class FlyoutVisualComponent implements OnDestroy {
       .subscribe(() => {
         console.log('next clicked');
       });
+
+    this.flyout.closed.subscribe(() => {
+      this.showButtons = true;
+    });
+
+    this.showButtons = false;
+  }
+
+  public openFlyoutWithFullscreenAvailable(record: any): void {
+    this.flyout = this.flyoutService.open(FlyoutDemoComponent, {
+      providers: [{
+        provide: FlyoutDemoContext,
+        useValue: record
+      }],
+      minWidth: 600,
+      defaultWidth: 800
+    });
 
     this.flyout.closed.subscribe(() => {
       this.showButtons = true;

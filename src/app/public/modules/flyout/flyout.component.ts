@@ -97,6 +97,8 @@ export class SkyFlyoutComponent implements OnDestroy, OnInit {
 
   public flyoutWidth = 0;
   public isDragging = false;
+  public isFullscreen = false;
+
   private xCoord = 0;
   private windowBufferSize = 20;
 
@@ -194,6 +196,8 @@ export class SkyFlyoutComponent implements OnDestroy, OnInit {
       this.updateBreakpointAndResponsiveClass(this.flyoutWidth);
     }
 
+    this.setFullscreen();
+
     if (event.target.innerWidth - this.flyoutWidth < this.windowBufferSize) {
       this.flyoutWidth = event.target.innerWidth - this.windowBufferSize;
       this.xCoord = this.windowBufferSize;
@@ -209,9 +213,18 @@ export class SkyFlyoutComponent implements OnDestroy, OnInit {
     }
 
     this.config = Object.assign({ providers: [] }, config);
-    this.config.defaultWidth = this.config.defaultWidth || 500;
+    this.config.defaultWidth = this.config.defaultWidth || (window.innerWidth / 2);
     this.config.minWidth = this.config.minWidth || 320;
+
+    if (this.config.defaultWidth < this.config.minWidth) {
+      this.config.defaultWidth = this.config.minWidth;
+    }
+
     this.config.maxWidth = this.config.maxWidth || this.config.defaultWidth;
+
+    if (this.config.defaultWidth > this.config.maxWidth) {
+      this.config.defaultWidth = this.config.maxWidth;
+    }
 
     this.config.showIterator = this.config.showIterator || false;
     this.config.iteratorNextButtonDisabled = this.config.iteratorNextButtonDisabled || false;
@@ -231,12 +244,20 @@ export class SkyFlyoutComponent implements OnDestroy, OnInit {
 
     this.flyoutWidth = this.config.defaultWidth;
 
+    // Ensure flyout does not load larger than the window and its buffer
+    if (window.innerWidth - this.flyoutWidth < this.windowBufferSize) {
+      this.flyoutWidth = window.innerWidth - this.windowBufferSize;
+      this.xCoord = this.windowBufferSize;
+    }
+
     if (this.flyoutMediaQueryService.isWidthWithinBreakpiont(window.innerWidth,
       SkyMediaBreakpoints.xs)) {
       this.updateBreakpointAndResponsiveClass(window.innerWidth);
     } else {
       this.updateBreakpointAndResponsiveClass(this.flyoutWidth);
     }
+
+    this.setFullscreen();
 
     return this.flyoutInstance;
   }
@@ -278,8 +299,7 @@ export class SkyFlyoutComponent implements OnDestroy, OnInit {
     event.preventDefault();
     event.stopPropagation();
 
-    if (this.flyoutMediaQueryService.isWidthWithinBreakpiont(window.innerWidth,
-      SkyMediaBreakpoints.xs)) {
+    if (this.isFullscreen) {
       return;
     }
 
@@ -420,6 +440,14 @@ export class SkyFlyoutComponent implements OnDestroy, OnInit {
     const newBreakpiont = this.flyoutMediaQueryService.current;
 
     this.adapter.setResponsiveClass(this.elementRef, newBreakpiont);
+  }
+
+  private setFullscreen() {
+    if ((window.innerWidth - this.windowBufferSize) < this.config.minWidth) {
+      this.isFullscreen = true;
+    } else {
+      this.isFullscreen = false;
+    }
   }
 
   private getString(key: string): string {
