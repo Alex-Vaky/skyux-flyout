@@ -43,6 +43,8 @@ export class FlyoutVisualComponent implements OnDestroy {
 
   private ngUnsubscribe = new Subject();
 
+  public showModalMask: boolean;
+
   constructor(
     private flyoutService: SkyFlyoutService
   ) { }
@@ -127,6 +129,22 @@ export class FlyoutVisualComponent implements OnDestroy {
     });
 
     this.showButtons = false;
+  }
+
+  public openFlyoutWithModal(): void {
+    this.flyout = this.flyoutService.open(FlyoutResponsiveDemoComponent);
+
+    this.flyout.closed.subscribe(() => {
+      this.showButtons = true;
+      this.showModalMask = false;
+    });
+
+    this.showButtons = false;
+    this.showModalMask = true;
+  }
+
+  public closeModalMask() {
+    this.showModalMask = false;
   }
 
   public toggleButtons() {

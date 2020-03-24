@@ -84,6 +84,14 @@
       >
         Open flyout with lg responsive content
       </button>
+      <button
+        class="sky-btn sky-btn-primary"
+        id="open-responsive-flyout-lg"
+        type="button"
+        (click)="openFlyoutWithModal()"
+      >
+        Open flyout with modal mask
+      </button>
     </div>
     <div
       class="sky-flyout-demo-item"
@@ -110,4 +118,24 @@
       </button>
     </div>
   </ng-container>
+</div>
+<div *ngIf="showModalMask"
+  class="sky-flyout-demo-modal-mask"
+>
+  <div class="sky-flyout-demo-modal-mask-btns">
+    <button
+      class="sky-btn sky-btn-primary"
+      type="button"
+    >
+      Click me
+    </button>
+
+    <button
+      class="sky-btn sky-btn-primary"
+      type="button"
+      (click)="closeModalMask()"
+    >
+      Close modal mask
+    </button>
+  </div>
 </div>

@@ -110,12 +110,12 @@ export class SkyFlyoutService implements OnDestroy {
     if (this.host) {
 
       // Flyout should close when user clicks outside of flyout.
-      // Since the flyout component stops click propigation, we can watch the document for clicks.
+      // Since the flyout component stops click propagation, we can watch the document for clicks.
       Observable
       .fromEvent(document, 'click')
       .takeUntil(this.idled)
-      .subscribe(() => {
-        if (!this.host.instance.isDragging) {
+      .subscribe((e) => {
+        if (!this.host.instance.isDragging && !this.targetIsAboveFlyout(e)) {
           this.close();
         }
       });
@@ -137,6 +137,24 @@ export class SkyFlyoutService implements OnDestroy {
         }
       });
     }
+  }
+
+  private targetIsAboveFlyout(e: Event): boolean {
+    const flyoutZIndex = getComputedStyle(
+      document.querySelector('.sky-flyout')
+    ).zIndex;
+
+    let el = e.target as HTMLElement;
+
+    while (el) {
+      if (getComputedStyle(el).zIndex > flyoutZIndex) {
+        return true;
+      }
+
+      el = el.parentElement;
+    }
+
+    return false;
   }
 
   private removeListners(): void {

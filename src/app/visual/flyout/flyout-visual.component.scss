@@ -1,3 +1,19 @@
 .sky-flyout-demo-item {
   padding: 8px 12px;
 }
+
+.sky-flyout-demo-modal-mask {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 10000;
+}
+
+.sky-flyout-demo-modal-mask-btns {
+  position: relative;
+  text-align: center;
+  top: 50%;
+}
