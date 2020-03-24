@@ -140,14 +140,13 @@ export class SkyFlyoutService implements OnDestroy {
   }
 
   private targetIsAboveFlyout(e: Event): boolean {
-    const flyoutZIndex = getComputedStyle(
-      document.querySelector('.sky-flyout')
-    ).zIndex;
+    const flyoutEl = document.querySelector('.sky-flyout');
+    const flyoutZIndex = +getComputedStyle(flyoutEl).zIndex;
 
     let el = e.target as HTMLElement;
 
     while (el) {
-      if (getComputedStyle(el).zIndex > flyoutZIndex) {
+      if (+getComputedStyle(el).zIndex > flyoutZIndex) {
         return true;
       }
 
